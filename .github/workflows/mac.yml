@@ -9,6 +9,9 @@ jobs:
   build:
     runs-on: macos-latest
     steps:
+    - name: Android Emulator Runner
+      uses: ReactiveCircus/android-emulator-runner@v2.13.0
+
     - uses: fastai/workflows/ssh@master
       with:
         ssh_key: ${{ secrets.SSH_KEY }}
