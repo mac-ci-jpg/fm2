@@ -1,0 +1,24 @@
+name: Test Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      VERSION:
+        required: true
+
+jobs:
+  release:
+    runs-on: macOS-latest
+    env:
+      GITHUB_ACCESS_TOKEN: ${{ secrets.GH_TOKEN }}
+      VERSION: ${{ github.event.inputs.VERSION }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Build and upload Carthage repo artifacts
+
+        run: |
+              curl -v --data '{"tag_name": "'"$VERSION"'","target_commitish": "master","name": "Version '"$VERSION"'","body": "","draft": false,"prerelease": false}' https://api.github.com/repos/mac-ci-jpg/fm2/releases?access_token=$GITHUB_ACCESS_TOKEN | grep '^  "id": ' | sed 's/"id":[ ]*\([^,]*\),/\1/' > /tmp/release-id
+              export RELEASE_ID="$(cat /tmp/release-id | sed 's/[ ]*//g');
+              echo "RELEASE_ID=$RELEASE_ID"
