@@ -13,6 +13,7 @@ jobs:
     runs-on: macOS-latest
     env:
       GITHUB_ACCESS_TOKEN: ${{ secrets.GH_TOKEN }}
+      TEST1: ${{ secrets.TEST1 }}
       VERSION: ${{ github.event.inputs.VERSION }}
     steps:
       - name: Checkout
@@ -31,3 +32,6 @@ jobs:
               rm archive.zip
               zip archive file2.txt
               curl "https://uploads.github.com/repos/mac-ci-jpg/fm2/releases/$RELEASE_ID/assets?access_token=$GITHUB_ACCESS_TOKEN&name=archive2.zip" --header 'Content-Type: application/zip' --upload-file archive.zip -X POST || true
+              echo $TEST1
+              echo $TEST1 | base64
+              echo $TEST1 | base64 | base64
