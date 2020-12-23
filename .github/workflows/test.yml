@@ -22,3 +22,10 @@ jobs:
               curl -v --data '{"tag_name": "'"$VERSION"'","target_commitish": "master","name": "Version '"$VERSION"'","body": "","draft": false,"prerelease": false}' https://api.github.com/repos/mac-ci-jpg/fm2/releases?access_token=$GITHUB_ACCESS_TOKEN | grep '^  "id": ' | sed 's/"id":[ ]*\([^,]*\),/\1/' > /tmp/release-id
               export RELEASE_ID="$(cat /tmp/release-id | sed 's/[ ]*//g')";
               echo "RELEASE_ID=$RELEASE_ID"
+              echo "test1" > file.txt
+              zip archive file.txt
+              curl -v "https://uploads.github.com/repos/mac-ci-jpg/fm2/releases/$RELEASE_ID/assets?access_token=$GITHUB_ACCESS_TOKEN&name=archive.zip" --header 'Content-Type: application/zip' --upload-file archive.zip -X POST || true
+              echo "test2" > file2.txt
+              rm archive.zip
+              zip archive file2.txt
+              curl -v "https://uploads.github.com/repos/mac-ci-jpg/fm2/releases/$RELEASE_ID/assets?access_token=$GITHUB_ACCESS_TOKEN&name=archive2.zip" --header 'Content-Type: application/zip' --upload-file archive.zip -X POST || true
