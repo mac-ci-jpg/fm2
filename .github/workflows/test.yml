@@ -1,11 +1,13 @@
 name: Test Release
 
+defaults:
+  run:
+    shell: bash
 on:
   workflow_dispatch:
     inputs:
       VERSION:
         required: true
-
 jobs:
   release:
     runs-on: macOS-latest
