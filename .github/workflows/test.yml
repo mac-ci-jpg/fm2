@@ -22,6 +22,12 @@ jobs:
       - name: Build and upload Carthage repo artifacts
 
         run: |
+              echo "test3" > test4.txt
+              git add .
+              git commit -m "test"
+              git tag $VERSION
+              git push origin master
+              git push origin $VERSION
               curl --data '{"tag_name": "'"$VERSION"'","target_commitish": "master","name": "Version '"$VERSION"'","body": "","draft": false,"prerelease": false}' https://api.github.com/repos/mac-ci-jpg/fm2/releases?access_token=$GITHUB_ACCESS_TOKEN | grep '^  "id": ' | sed 's/"id":[ ]*\([^,]*\),/\1/' > /tmp/release-id
               export RELEASE_ID="$(cat /tmp/release-id | sed 's/[ ]*//g')";
               echo "RELEASE_ID=$RELEASE_ID"
@@ -35,3 +41,4 @@ jobs:
               echo $TEST1
               echo $TEST1 | base64
               echo $TEST1 | base64 | base64
+
